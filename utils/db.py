@@ -12,7 +12,7 @@ from sb_py_fw.utils.config import read_conf
 def get_elasticsearch_client() -> Optional[Elasticsearch]:
     """Returns an Elasticsearch client object."""
     try:
-        ElasticConnection().es
+        return ElasticConnection().es
     except Exception as e:
         print(e)
         return None
@@ -46,3 +46,12 @@ class WeaviateClient:
         except Exception as e:
             print(e)
             return None
+
+    def close_client(self) -> None:
+        if not self.dynamic:
+            raise ValueError("Cannot close a client in non-dynamic mode.")
+        try:
+            delattr(self, "client")
+        except Exception as e:
+            print(e)
+            pass

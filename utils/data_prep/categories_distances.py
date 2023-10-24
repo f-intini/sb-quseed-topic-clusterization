@@ -64,7 +64,7 @@ class CategoriesDistanceIngestion:
             e: if the file cannot be read
         """
         try:
-            with open("./categories_distances.pkl", "rb") as f:
+            with open("../categories_distances.pkl", "rb") as f:
                 self.categories_distances = pickle.load(f)
         except Exception as e:
             print(e)
@@ -133,6 +133,10 @@ class CategoriesDistanceIngestion:
                     self.session.commit()
                     self.close_db_session()
                     print(f"Table {self.table_name} dropped.")
+
+                    print(f"Recreating table {self.table_name}.")
+                    self.Base.metadata.create_all(self.engine)  # type: ignore
+                    print(f"Table {self.table_name} created.")
                 except Exception as e:
                     print(e)
                     raise e

@@ -38,9 +38,9 @@ def custom_distance(
 
     Args:
         x (Dict[str, Union[np.array, List[str]]]): dictionary containing information of a document,
-            must have keys 'vector', 'categories' and 'title'
+            must have keys 'content', 'categories' and 'title'
         y (Dict[str, Union[np.array, List[str]]]): dictionary containing information of a document,
-            must have keys 'vector', 'categories' and 'title'
+            must have keys 'content', 'categories' and 'title'
         categories (float, optional): Categories score weight. Defaults to 0.1.
         content (float, optional): Content score weight. Defaults to 0.7.
         title (float, optional): Title score weight. Defaults to 0.2.
@@ -48,7 +48,7 @@ def custom_distance(
 
     Raises:
         ValueError: <x> and <y> must be dictionaries
-        ValueError: <x> and <y> must have keys 'vector', 'categories' and 'title'
+        ValueError: <x> and <y> must have keys 'content', 'categories' and 'title'
         ValueError: Categories distances not found, if relying of default values,
             please make sure the table exists in the database.
 
@@ -61,9 +61,9 @@ def custom_distance(
                 f"<x> and <y> must be dictionaries, not {type(obj)} and {type(obj)}"
             )
 
-        if not all([key in obj.keys() for key in ["vector", "categories", "title"]]):
+        if not all([key in obj.keys() for key in ["content", "categories", "title"]]):
             raise ValueError(
-                f"<x> and <y> must have keys 'vector', 'categories' and 'title'"
+                f"<x> and <y> must have keys 'content', 'categories' and 'title'"
             )
 
     if not len(categories_distances.keys()):
@@ -73,7 +73,7 @@ def custom_distance(
         )
 
     result: float = 0.0
-    result = content * euclidean_distance(x["vector"], y["vector"])
+    result = content * euclidean_distance(x["content"], y["content"])
 
     categories_distance: float = 0.0
     x_categories = [cat for cat in x["categories"] if cat != "unknown"]
